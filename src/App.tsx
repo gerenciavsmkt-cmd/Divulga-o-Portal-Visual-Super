@@ -616,10 +616,10 @@ export default function App() {
             
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
               {[
-                { label: "Cadastrados", value: "200-400", sub: "Novos clientes" },
-                { label: "Ativos", value: "100+", sub: "Logins mensais" },
-                { label: "Pedidos", value: "30-50", sub: "Via portal" },
-                { label: "Conversão", value: "25%", sub: "Taxa de adoção" }
+                { label: "Cadastrados", value: <><Counter value={200} />-<Counter value={400} /></>, sub: "Novos clientes" },
+                { label: "Ativos", value: <><Counter value={100} />+</>, sub: "Logins mensais" },
+                { label: "Pedidos", value: <><Counter value={30} />-<Counter value={50} /></>, sub: "Via portal" },
+                { label: "Conversão", value: <><Counter value={25} />%</>, sub: "Taxa de adoção" }
               ].map((metric, i) => (
                 <motion.div 
                   key={i} 
@@ -630,7 +630,9 @@ export default function App() {
                   transition={{ delay: i * 0.1 }}
                 >
                   <p className="text-sm font-bold text-slate-500 uppercase tracking-widest mb-2">{metric.label}</p>
-                  <p className="text-4xl font-black text-visual-blue mb-1">{metric.value}</p>
+                  <div className="text-4xl font-black text-visual-blue mb-1 flex justify-center items-baseline">
+                    {metric.value}
+                  </div>
                   <p className="text-xs text-slate-400 font-medium">{metric.sub}</p>
                 </motion.div>
               ))}
