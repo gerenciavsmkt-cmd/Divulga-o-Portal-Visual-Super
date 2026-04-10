@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence, useMotionValue, useTransform, animate, useInView } from "motion/react";
 import { 
   Rocket, 
   Users, 
@@ -215,7 +215,7 @@ export default function App() {
                       </div>
                       <CardTitle className="text-2xl">{step.title}</CardTitle>
                       <CardDescription className="text-lg font-bold text-visual-blue">
-                        +{step.points} Pontos
+                        +<Counter value={step.points} /> Pontos
                       </CardDescription>
                     </CardHeader>
                   </Card>
@@ -259,24 +259,7 @@ export default function App() {
                     <Badge className="bg-visual-yellow text-visual-dark">Semanal</Badge>
                   </div>
                   <div className="p-6 space-y-6">
-                    {[
-                      { name: "Carlos Silva", score: "45 Clientes", rank: 1, trend: "up" },
-                      { name: "Ana Oliveira", score: "38 Clientes", rank: 2, trend: "up" },
-                      { name: "Roberto Santos", score: "32 Clientes", rank: 3, trend: "down" }
-                    ].map((user, i) => (
-                      <div key={i} className="flex items-center gap-4 p-4 rounded-xl bg-slate-50 border border-slate-100">
-                        <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-white ${i === 0 ? 'bg-visual-yellow text-visual-dark' : 'bg-slate-300'}`}>
-                          {user.rank}º
-                        </div>
-                        <div className="flex-1">
-                          <p className="font-bold text-slate-800">{user.name}</p>
-                          <p className="text-sm text-slate-500">{user.score}</p>
-                        </div>
-                        <div className="text-visual-blue font-bold">
-                          {user.trend === "up" ? "↑" : "↓"}
-                        </div>
-                      </div>
-                    ))}
+                    <RankingList />
                   </div>
                   <div className="p-4 bg-slate-100 text-center text-xs text-slate-500 font-medium">
                     Exibido em: Grupo de Vendas • TV da Empresa • Reunião Semanal
@@ -747,6 +730,81 @@ export default function App() {
           </div>
         )}
       </AnimatePresence>
+    </div>
+  );
+}
+
+function Counter({ value }: { value: number }) {
+  const count = useMotionValue(0);
+  const rounded = useTransform(count, (latest) => Math.round(latest));
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true });
+
+  useEffect(() => {
+    if (isInView) {
+      const controls = animate(count, value, { duration: 2, ease: "easeOut" });
+      return controls.stop;
+    }
+  }, [value, count, isInView]);
+
+  return <motion.span ref={ref}>{rounded}</motion.span>;
+}
+
+function RankingList() {
+  const [users, setUsers] = useState([
+    { id: 1, name: "Carlos Silva", score: 45, trend: "up" },
+    { id: 2, name: "Ana Oliveira", score: 38, trend: "up" },
+    { id: 3, name: "Roberto Santos", score: 32, trend: "down" }
+  ]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setUsers(prevUsers => {
+        const newUsers = [...prevUsers];
+        // Simple shuffle logic to simulate position changes
+        for (let i = newUsers.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [newUsers[i], newUsers[j]] = [newUsers[j], newUsers[i]];
+        }
+        return newUsers;
+      });
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="space-y-4">
+      {users.map((user, i) => (
+        <motion.div 
+          key={user.id} 
+          layout
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ 
+            layout: { type: "spring", stiffness: 300, damping: 30 },
+            opacity: { duration: 0.2 }
+          }}
+          className="flex items-center gap-4 p-4 rounded-xl bg-slate-50 border border-slate-100 shadow-sm"
+        >
+          <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-white transition-colors duration-500 ${i === 0 ? 'bg-visual-yellow text-visual-dark' : 'bg-slate-300'}`}>
+            {i + 1}º
+          </div>
+          <div className="flex-1">
+            <p className="font-bold text-slate-800">{user.name}</p>
+            <p className="text-sm text-slate-500">{user.score} Clientes</p>
+          </div>
+          <motion.div 
+            animate={{ 
+              y: user.trend === "up" ? [0, -4, 0] : [0, 4, 0],
+            }}
+            transition={{ repeat: Infinity, duration: 2 }}
+            className={`font-bold ${user.trend === "up" ? "text-green-500" : "text-visual-blue"}`}
+          >
+            {user.trend === "up" ? "↑" : "↓"}
+          </motion.div>
+        </motion.div>
+      ))}
     </div>
   );
 }
