@@ -24,7 +24,14 @@ import {
   Check,
   Download,
   Share2,
-  X
+  X,
+  Package,
+  Ticket,
+  Heart,
+  MousePointer2,
+  Eye,
+  BarChart,
+  ShoppingBag
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -636,6 +643,197 @@ export default function App() {
                   <p className="text-xs text-slate-400 font-medium">{metric.sub}</p>
                 </motion.div>
               ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Section 8: Delivery Impact Strategy */}
+        <section className="py-24 bg-slate-50 overflow-hidden">
+          <div className="container mx-auto px-4">
+            <div className="text-center max-w-3xl mx-auto mb-16">
+              <motion.div {...fadeIn}>
+                <Badge className="mb-4 bg-visual-blue text-white px-4 py-1 rounded-full text-sm font-bold uppercase tracking-wider">
+                  Estratégia de Impacto na Entrega
+                </Badge>
+                <h2 className="text-3xl md:text-5xl font-black text-visual-dark mb-6">
+                  🎯 Objetivo: Converter Clientes
+                </h2>
+                <div className="flex flex-wrap justify-center gap-4 text-slate-600 font-bold">
+                  <span className="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-sm border border-slate-100">
+                    <Users className="w-4 h-4 text-visual-blue" /> Usuários do Portal
+                  </span>
+                  <span className="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-sm border border-slate-100">
+                    <Rocket className="w-4 h-4 text-visual-blue" /> Compradores Recorrentes
+                  </span>
+                  <span className="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-sm border border-slate-100">
+                    <Smartphone className="w-4 h-4 text-visual-blue" /> Clientes Digitais
+                  </span>
+                </div>
+              </motion.div>
+            </div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {[
+                {
+                  id: "1",
+                  title: "Flyer dentro da caixa",
+                  desc: "A estratégia principal. Inserir um flyer pequeno em todos os pedidos com mensagem direta.",
+                  icon: Package,
+                  details: {
+                    frente: "🚀 Seu novo jeito de comprar da Visual Super. Acesse agora: portal.visualsuper.com.br",
+                    verso: "🎁 Cupom PORTAL10: 10% de desconto no próximo pedido pelo portal."
+                  }
+                },
+                {
+                  id: "2",
+                  title: "Adesivo na embalagem",
+                  desc: "Colar um adesivo na caixa com mensagem curta e QR Code.",
+                  icon: Zap,
+                  copy: "📦 Seu próximo pedido pode ser feito online. 👉 portal.visualsuper.com.br"
+                },
+                {
+                  id: "3",
+                  title: "Cartão de Agradecimento",
+                  desc: "Estratégia emocional para gerar aproximação com a marca.",
+                  icon: Heart,
+                  copy: "Obrigado pela sua compra! Agora você também pode comprar direto pelo nosso portal."
+                },
+                {
+                  id: "4",
+                  title: "QR Code Inteligente",
+                  desc: "Leve o cliente para página de cadastro, vídeo ou catálogo digital.",
+                  icon: QrCode,
+                  copy: "Landing simples: 'Bem-vindo ao Portal Visual Super' com botão 'Criar acesso'."
+                },
+                {
+                  id: "5",
+                  title: "Impacto Visual Interno",
+                  desc: "Desperte curiosidade com frases impactantes logo ao abrir a caixa.",
+                  icon: Eye,
+                  copy: "Seu próximo pedido pode levar menos de 30 segundos. 📲 portal.visualsuper.com.br"
+                },
+                {
+                  id: "6",
+                  title: "Estratégia de Recompensa",
+                  desc: "Incentive o primeiro acesso com benefícios reais.",
+                  icon: Gift,
+                  copy: "🎁 Primeiro pedido pelo portal ganha frete grátis ou brinde exclusivo."
+                },
+                {
+                  id: "7",
+                  title: "Marketplaces (ML, Shopee...)",
+                  desc: "Converta clientes de outros canais em clientes diretos do fabricante.",
+                  icon: ShoppingBag,
+                  copy: "📲 Compre direto do fabricante e veja mais produtos, personalizações e promoções."
+                },
+                {
+                  id: "8",
+                  title: "Aumento de Conversão",
+                  desc: "Frases que geram curiosidade e mostram a variedade de soluções.",
+                  icon: Target,
+                  copy: "Mais de 2000 soluções para o seu supermercado. Descubra novas ideias."
+                }
+              ].map((item, i) => (
+                <motion.div 
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                >
+                  <Card className="h-full border-none shadow-xl hover:shadow-2xl transition-all duration-300 group rounded-[2rem] overflow-hidden">
+                    <CardHeader className="bg-slate-900 text-white p-6">
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 bg-visual-yellow rounded-2xl flex items-center justify-center text-visual-dark group-hover:rotate-12 transition-transform">
+                          <item.icon className="w-6 h-6" />
+                        </div>
+                        <CardTitle className="text-xl">{item.id}. {item.title}</CardTitle>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="p-6">
+                      <p className="text-slate-600 mb-4 font-medium">{item.desc}</p>
+                      {item.details ? (
+                        <div className="space-y-3">
+                          <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 text-xs">
+                            <span className="font-bold text-visual-blue block mb-1">FRENTE:</span>
+                            {item.details.frente}
+                          </div>
+                          <div className="p-3 bg-visual-yellow/10 rounded-xl border border-visual-yellow/20 text-xs">
+                            <span className="font-bold text-visual-dark block mb-1">VERSO:</span>
+                            {item.details.verso}
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="p-4 bg-slate-50 rounded-xl border border-slate-100 text-sm italic text-slate-700">
+                          "{item.copy}"
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Results and Advanced Scratch Card */}
+            <div className="mt-16 grid lg:grid-cols-2 gap-8">
+              <motion.div 
+                className="bg-visual-blue rounded-[2.5rem] p-10 text-white relative overflow-hidden"
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+              >
+                <div className="absolute top-0 right-0 p-8 opacity-10">
+                  <BarChart className="w-32 h-32" />
+                </div>
+                <div className="relative z-10">
+                  <h3 className="text-2xl font-bold mb-6 flex items-center gap-2">
+                    <BarChart className="text-visual-yellow" /> Resultado Esperado
+                  </h3>
+                  <div className="space-y-6">
+                    <div className="flex justify-between items-end border-b border-white/10 pb-4">
+                      <span className="text-blue-100">Escaneiam o QR Code</span>
+                      <span className="text-3xl font-black text-visual-yellow">5% a 15%</span>
+                    </div>
+                    <div className="flex justify-between items-end border-b border-white/10 pb-4">
+                      <span className="text-blue-100">Criam acesso no portal</span>
+                      <span className="text-3xl font-black text-visual-yellow">3% a 8%</span>
+                    </div>
+                    <div className="flex justify-between items-end">
+                      <span className="text-blue-100">Começam a usar recorrente</span>
+                      <span className="text-3xl font-black text-visual-yellow">2% a 20%*</span>
+                    </div>
+                    <p className="text-xs text-blue-200 mt-4 italic">* Com incentivo real (cupom/brinde), a conversão pode chegar a 20%.</p>
+                  </div>
+                </div>
+              </motion.div>
+
+              <motion.div 
+                className="bg-slate-900 rounded-[2.5rem] p-10 text-white relative overflow-hidden border-4 border-visual-yellow/20"
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+              >
+                <div className="absolute -top-10 -right-10 w-40 h-40 bg-visual-yellow rounded-full blur-[80px] opacity-20" />
+                <div className="relative z-10">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="p-3 bg-visual-yellow rounded-2xl text-visual-dark">
+                      <Ticket className="w-6 h-6" />
+                    </div>
+                    <h3 className="text-2xl font-bold">Estratégia Avançada: Cartão Raspável</h3>
+                  </div>
+                  <p className="text-slate-400 mb-8 text-lg">
+                    Essa é a estratégia mais forte de todas. Colocar um cartão raspável físico dentro da caixa.
+                  </p>
+                  <div className="bg-white/5 border border-white/10 p-6 rounded-2xl text-center">
+                    <p className="text-visual-yellow font-black text-xl mb-2 uppercase tracking-tighter">
+                      "Raspe e descubra seu desconto no portal"
+                    </p>
+                    <p className="text-slate-500 text-sm">
+                      Isso aumenta MUITO a interação e a curiosidade do cliente.
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
             </div>
           </div>
         </section>
