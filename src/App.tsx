@@ -57,7 +57,7 @@ export default function App() {
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
-                className="flex justify-center mb-8"
+                className="flex justify-center mb-16"
               >
                 <img 
                   src="https://res.cloudinary.com/dq8978o4w/image/upload/v1746451989/Logo_vertical_branca_ozz3z1.png" 
@@ -332,15 +332,21 @@ export default function App() {
                   <CardContent>
                     <div className="grid grid-cols-2 gap-4">
                       {[
-                        { label: "Link Curto", icon: Smartphone },
+                        { label: "Link Curto", icon: Smartphone, link: "https://portal.visualsuper.com.br" },
                         { label: "QR Code", icon: QrCode },
-                        { label: "Vídeo 30s", icon: Video },
+                        { label: "Vídeo 30s", icon: Video, link: "https://res.cloudinary.com/dq8978o4w/video/upload/v1775842695/portal-intro-divulga_uxgzef.mp4" },
                         { label: "Arte WhatsApp", icon: MessageSquare }
                       ].map((tool, i) => (
-                        <div key={i} className="flex flex-col items-center justify-center p-4 bg-white/10 rounded-2xl hover:bg-white/20 transition-colors cursor-pointer">
+                        <a 
+                          key={i} 
+                          href={tool.link || "#"} 
+                          target={tool.link ? "_blank" : undefined}
+                          rel={tool.link ? "noopener noreferrer" : undefined}
+                          className="flex flex-col items-center justify-center p-4 bg-white/10 rounded-2xl hover:bg-white/20 transition-colors cursor-pointer"
+                        >
                           <tool.icon className="w-8 h-8 mb-2 text-visual-yellow" />
                           <span className="text-sm font-bold">{tool.label}</span>
-                        </div>
+                        </a>
                       ))}
                     </div>
                   </CardContent>
