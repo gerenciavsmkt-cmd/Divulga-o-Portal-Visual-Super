@@ -3,7 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { motion } from "motion/react";
+import { useState } from "react";
+import { motion, AnimatePresence } from "motion/react";
 import { 
   Rocket, 
   Users, 
@@ -18,7 +19,12 @@ import {
   Zap,
   Smartphone,
   QrCode,
-  Video
+  Video,
+  Copy,
+  Check,
+  Download,
+  Share2,
+  X
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -41,6 +47,20 @@ const staggerContainer = {
 };
 
 export default function App() {
+  const [showLinkModal, setShowLinkModal] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const [hoveredVideo, setHoveredVideo] = useState(false);
+
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const shareWhatsApp = (text: string) => {
+    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+  };
+
   return (
     <div className="min-h-screen bg-white selection:bg-visual-yellow/30">
       <main>
@@ -323,30 +343,90 @@ export default function App() {
               </motion.div>
               
               <motion.div {...fadeIn}>
-                <Card className="h-full border-none bg-slate-900 text-white">
+                <Card className="h-full border-none bg-slate-900 text-white overflow-visible">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Zap className="text-visual-yellow" /> Material de Apoio
                     </CardTitle>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="overflow-visible">
                     <div className="grid grid-cols-2 gap-4">
                       {[
-                        { label: "Link Curto", icon: Smartphone, link: "https://portal.visualsuper.com.br" },
-                        { label: "QR Code", icon: QrCode },
-                        { label: "Vídeo 30s", icon: Video, link: "https://res.cloudinary.com/dq8978o4w/video/upload/v1775842695/portal-intro-divulga_uxgzef.mp4" },
-                        { label: "Arte WhatsApp", icon: MessageSquare }
+                        { 
+                          label: "Link Curto", 
+                          icon: Smartphone, 
+                          onClick: () => setShowLinkModal(true) 
+                        },
+                        { 
+                          label: "QR Code", 
+                          icon: QrCode 
+                        },
+                        { 
+                          label: "Vídeo 30s", 
+                          icon: Video,
+                          isPlayer: true
+                        },
+                        { 
+                          label: "Arte WhatsApp", 
+                          icon: MessageSquare 
+                        }
                       ].map((tool, i) => (
-                        <a 
+                        <div 
                           key={i} 
-                          href={tool.link || "#"} 
-                          target={tool.link ? "_blank" : undefined}
-                          rel={tool.link ? "noopener noreferrer" : undefined}
-                          className="flex flex-col items-center justify-center p-4 bg-white/10 rounded-2xl hover:bg-white/20 transition-colors cursor-pointer"
+                          className="relative group"
+                          onMouseEnter={() => tool.isPlayer && setHoveredVideo(true)}
+                          onMouseLeave={() => tool.isPlayer && setHoveredVideo(false)}
                         >
-                          <tool.icon className="w-8 h-8 mb-2 text-visual-yellow" />
-                          <span className="text-sm font-bold">{tool.label}</span>
-                        </a>
+                          <button 
+                            onClick={tool.onClick}
+                            className="w-full flex flex-col items-center justify-center p-4 bg-white/10 rounded-2xl hover:bg-white/20 transition-all duration-300 cursor-pointer border border-white/5 hover:border-white/20"
+                          >
+                            <tool.icon className="w-8 h-8 mb-2 text-visual-yellow" />
+                            <span className="text-sm font-bold">{tool.label}</span>
+                          </button>
+
+                          {tool.isPlayer && (
+                            <AnimatePresence>
+                              {hoveredVideo && (
+                                <motion.div 
+                                  initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                                  exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                                  className="absolute bottom-full left-1/2 -translate-x-1/2 mb-4 w-56 bg-slate-800 rounded-2xl shadow-2xl border border-white/10 overflow-hidden z-50 pointer-events-auto"
+                                >
+                                  <div className="aspect-[9/16] bg-black relative group/player">
+                                    <video 
+                                      src="https://res.cloudinary.com/dq8978o4w/video/upload/v1775842695/portal-intro-divulga_uxgzef.mp4"
+                                      autoPlay
+                                      muted
+                                      loop
+                                      playsInline
+                                      className="w-full h-full object-cover"
+                                    />
+                                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/player:opacity-100 transition-opacity flex items-center justify-center gap-3">
+                                      <a 
+                                        href="https://res.cloudinary.com/dq8978o4w/video/upload/v1775842695/portal-intro-divulga_uxgzef.mp4" 
+                                        download
+                                        className="p-2 bg-white rounded-full text-slate-900 hover:scale-110 transition-transform"
+                                      >
+                                        <Download className="w-4 h-4" />
+                                      </a>
+                                      <button 
+                                        onClick={() => shareWhatsApp("Confira o novo Portal Visual Super! https://portal.visualsuper.com.br")}
+                                        className="p-2 bg-green-500 rounded-full text-white hover:scale-110 transition-transform"
+                                      >
+                                        <Share2 className="w-4 h-4" />
+                                      </button>
+                                    </div>
+                                  </div>
+                                  <div className="p-3 text-center text-xs font-bold text-slate-300">
+                                    Preview do Portal
+                                  </div>
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          )}
+                        </div>
                       ))}
                     </div>
                   </CardContent>
@@ -609,6 +689,64 @@ export default function App() {
           </div>
         </section>
       </main>
+
+      {/* Modals */}
+      <AnimatePresence>
+        {showLinkModal && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowLinkModal(false)}
+              className="absolute inset-0 bg-slate-900/80 backdrop-blur-sm"
+            />
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden"
+            >
+              <div className="p-8">
+                <div className="flex justify-between items-center mb-6">
+                  <h3 className="text-2xl font-bold text-visual-dark">Link do Portal</h3>
+                  <button 
+                    onClick={() => setShowLinkModal(false)}
+                    className="p-2 hover:bg-slate-100 rounded-full transition-colors"
+                  >
+                    <X className="w-6 h-6 text-slate-400" />
+                  </button>
+                </div>
+                
+                <p className="text-slate-600 mb-6">
+                  Copie o link abaixo para enviar aos seus clientes e facilitar o acesso deles.
+                </p>
+
+                <div className="flex items-center gap-2 p-4 bg-slate-50 rounded-2xl border border-slate-100 mb-8">
+                  <span className="flex-1 font-mono text-sm text-visual-blue truncate">
+                    portal.visualsuper.com.br
+                  </span>
+                  <Button 
+                    onClick={() => copyToClipboard("https://portal.visualsuper.com.br")}
+                    className={`${copied ? 'bg-green-500 hover:bg-green-600' : 'bg-visual-blue hover:bg-visual-blue/90'} text-white rounded-xl transition-all duration-300`}
+                  >
+                    {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                    <span className="ml-2">{copied ? "Copiado!" : "Copiar"}</span>
+                  </Button>
+                </div>
+
+                <Button 
+                  onClick={() => setShowLinkModal(false)}
+                  variant="outline"
+                  className="w-full py-6 rounded-2xl border-slate-200 text-slate-600 font-bold"
+                >
+                  Fechar
+                </Button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
