@@ -54,6 +54,20 @@ export default function App() {
           <div className="container mx-auto px-4 relative z-10">
             <div className="max-w-4xl mx-auto text-center">
               <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                className="flex justify-center mb-8"
+              >
+                <img 
+                  src="https://res.cloudinary.com/dq8978o4w/image/upload/v1746451989/Logo_vertical_branca_ozz3z1.png" 
+                  alt="Visual Super Logo" 
+                  className="h-32 md:h-40 w-auto"
+                  referrerPolicy="no-referrer"
+                />
+              </motion.div>
+
+              <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5 }}
@@ -91,7 +105,7 @@ export default function App() {
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <motion.div {...fadeIn}>
                 <h2 className="text-3xl md:text-4xl font-bold text-visual-dark mb-6">
-                  1 Divulguem o portal
+                  1. O sucesso da Portal também depende de você!
                 </h2>
                 <p className="text-slate-600 text-lg mb-8">
                   Não é apenas "divulgar um site". É apresentar uma ferramenta que trabalha para o consultor enquanto ele foca em novos negócios.
