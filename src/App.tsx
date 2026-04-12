@@ -31,7 +31,9 @@ import {
   MousePointer2,
   Eye,
   BarChart,
-  ShoppingBag
+  ShoppingBag,
+  FileText,
+  FileCheck
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -210,9 +212,9 @@ export default function App() {
               viewport={{ once: true }}
             >
               {[
-                { title: "Cadastro Criado", points: 10, icon: Users, color: "bg-visual-blue" },
-                { title: "Primeiro Login", points: 20, icon: Rocket, color: "bg-purple-500" },
-                { title: "Primeiro Pedido", points: 50, icon: Trophy, color: "bg-visual-yellow" }
+                { title: "Clientes que acessaram", points: 10, icon: Users, color: "bg-visual-blue" },
+                { title: "Fizeram orçamento", points: 20, icon: FileText, color: "bg-purple-500" },
+                { title: "Finalizaram orçamento", points: 50, icon: Trophy, color: "bg-visual-yellow" }
               ].map((step, i) => (
                 <motion.div key={i} variants={fadeIn}>
                   <Card className="h-full border-2 hover:border-visual-blue transition-all duration-300 group">
